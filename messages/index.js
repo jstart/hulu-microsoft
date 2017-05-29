@@ -34,10 +34,14 @@ var bot = new builder.UniversalBot(connector, function (session) {
       session.send("You can say things like, search for Seinfeld, or tell me about The Handmaids Tale.")
     } else if (hulu.containsGenre(messageText)) {
       var genre = hulu.containsGenre(messageText)
-      session.send("You can browse the " + genre.name + " genre on Hulu.com")
+      session.send("You can browse the " + genre.name + " genre on hulu.com" + genre.link)
     }  else {
       messageText = messageText.replace("search for", "").replace("tell me about", "").replace("find", "").replace("season", "").replace("seasons", "")
       hulu.search(messageText, function(results, speechOutput) {
+        if (results == undefined) {
+          session.send("Hmm, I can't find that show")
+          return
+        }
         // let elements = messenger.parseAsElements(results)
         session.send(speechOutput + " " + 'https://hulu.com/' + results.canonical_name)
         // messenger.sendGenericMessage(senderID, elements)
